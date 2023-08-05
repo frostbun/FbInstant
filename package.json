@@ -1,0 +1,18 @@
+{
+  "name": "com.frostbun.fbinstant",
+  "displayName": "Facebook Instant",
+  "version": "1.0.0",
+  "description": "",
+  "license": "MIT",
+  "unity": "2023.5",
+  "author": {
+    "name": "frostbun",
+    "email": "manhnb1911@gmail.com",
+    "url": "https://github.com/frostbun"
+  },
+  "dependencies": {},
+  "gitDependencies": {
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+    "com.frostbun.unit.extensions": "https://github.com/frostbun/UniT.Extensions.git"
+  }
+}
