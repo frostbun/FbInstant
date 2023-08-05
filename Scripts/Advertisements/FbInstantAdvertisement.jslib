@@ -45,7 +45,7 @@ const FbInstantAdvertisingLibrary = {
     },
 
     $_isAdReady: function (adId) {
-        return !!(_getCache(UTF8ToString(adId)).loaded.length)
+        return !!(_getCache(UTF8ToString(adId)).loaded.length);
     },
 
     $_loadAd: function (adId, loadInter, callbackObj, callbackMethod, callbackId) {
@@ -55,7 +55,7 @@ const FbInstantAdvertisingLibrary = {
 
         const load = (ad) => ad.loadAsync()
             .then(() => {
-                cache.loaded.push(ad)
+                cache.loaded.push(ad);
                 sendMessage();
             })
             .catch(error => {
@@ -108,7 +108,7 @@ const FbInstantAdvertisingLibrary = {
                 error: error ? JSON.stringify(error) : null,
                 callbackId: UTF8ToString(callbackId),
                 ...params,
-            })
+            }),
         );
     },
 };
