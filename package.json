@@ -2,7 +2,7 @@
   "name": "com.frostbun.fbinstant",
   "displayName": "Facebook Instant",
   "version": "1.0.0",
-  "description": "",
+  "description": "Facebook Instant Games SDK for Unity",
   "license": "MIT",
   "unity": "2023.5",
   "author": {
