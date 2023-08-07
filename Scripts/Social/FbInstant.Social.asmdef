@@ -1,7 +1,0 @@
-{
-  "name": "FbInstant.Social",
-  "rootNamespace": "FbInstant",
-  "references": [
-    "UniT.Extensions"
-  ]
-}

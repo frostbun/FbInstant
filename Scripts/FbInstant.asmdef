@@ -1,5 +1,5 @@
 {
-  "name": "FbInstant.Player",
+  "name": "FbInstant",
   "rootNamespace": "FbInstant",
   "references": [
     "UniTask",
