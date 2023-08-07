@@ -61,11 +61,13 @@ const FbInstantPlayerLibrary = {
         SendMessage(
             UTF8ToString(callbackObj),
             UTF8ToString(callbackMethod),
-            JSON.stringify({
-                error: error ? JSON.stringify(error) : null,
-                callbackId: UTF8ToString(callbackId),
-                ...params,
-            })
+            JSON.stringify(Object.assign(
+                {
+                    error: error ? JSON.stringify(error) : null,
+                    callbackId: UTF8ToString(callbackId),
+                },
+                params
+            )),
         );
     },
 };
