@@ -4,16 +4,16 @@ namespace FbInstant.Social
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
     using Newtonsoft.Json;
-    using UniT.Extensions;
     using UnityEngine;
 
     public class FbInstantSocial : MonoBehaviour
     {
         public static FbInstantSocial Instantiate()
         {
-            return new GameObject(nameof(FbInstantSocial) + Guid.NewGuid())
-                   .AddComponent<FbInstantSocial>()
-                   .DontDestroyOnLoad();
+            var instance = new GameObject(nameof(FbInstantSocial) + Guid.NewGuid())
+                .AddComponent<FbInstantSocial>();
+            DontDestroyOnLoad(instance);
+            return instance;
         }
 
         public void Invite(string text, Texture2D texture, Dictionary<string, object> @params = null)

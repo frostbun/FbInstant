@@ -1,18 +1,39 @@
-const FbInstantAdvertisingLibrary = {
+const FbInstantAdvertisementLibrary = {
 
     _showBannerAd: function (adId, callbackObj, callbackMethod, callbackId) {
+        adId = UTF8ToString(adId);
+        callbackObj = UTF8ToString(callbackObj);
+        callbackMethod = UTF8ToString(callbackMethod);
+        callbackId = UTF8ToString(callbackId);
 
-        const sendMessage = (error = null) => _sendMessage(error, callbackObj, callbackMethod, callbackId);
+        const sendMessage = (error = null) => SendMessage(
+            callbackObj,
+            callbackMethod,
+            JSON.stringify({
+                error: error ? JSON.stringify(error) : null,
+                callbackId: callbackId,
+            }),
+        );
 
         FBInstant
-            .loadBannerAdAsync(UTF8ToString(adId))
+            .loadBannerAdAsync(adId)
             .then(sendMessage)
             .catch(sendMessage);
     },
 
     _hideBannerAd: function (callbackObj, callbackMethod, callbackId) {
+        callbackObj = UTF8ToString(callbackObj);
+        callbackMethod = UTF8ToString(callbackMethod);
+        callbackId = UTF8ToString(callbackId);
 
-        const sendMessage = (error = null) => _sendMessage(error, callbackObj, callbackMethod, callbackId);
+        const sendMessage = (error = null) => SendMessage(
+            callbackObj,
+            callbackMethod,
+            JSON.stringify({
+                error: error ? JSON.stringify(error) : null,
+                callbackId: callbackId,
+            }),
+        );
 
         FBInstant
             .hideBannerAdAsync()
@@ -50,8 +71,20 @@ const FbInstantAdvertisingLibrary = {
 
     $_loadAd: function (adId, loadInter, callbackObj, callbackMethod, callbackId) {
         adId = UTF8ToString(adId);
+        callbackObj = UTF8ToString(callbackObj);
+        callbackMethod = UTF8ToString(callbackMethod);
+        callbackId = UTF8ToString(callbackId);
+
+        const sendMessage = (error = null) => SendMessage(
+            callbackObj,
+            callbackMethod,
+            JSON.stringify({
+                error: error ? JSON.stringify(error) : null,
+                callbackId: callbackId,
+            }),
+        );
+
         const cache = _getCache(adId);
-        const sendMessage = (error = null) => _sendMessage(error, callbackObj, callbackMethod, callbackId);
 
         const load = (ad) => ad.loadAsync()
             .then(() => {
@@ -72,8 +105,20 @@ const FbInstantAdvertisingLibrary = {
 
     $_showAd: function (adId, callbackObj, callbackMethod, callbackId) {
         adId = UTF8ToString(adId);
+        callbackObj = UTF8ToString(callbackObj);
+        callbackMethod = UTF8ToString(callbackMethod);
+        callbackId = UTF8ToString(callbackId);
+
+        const sendMessage = (error = null) => SendMessage(
+            callbackObj,
+            callbackMethod,
+            JSON.stringify({
+                error: error ? JSON.stringify(error) : null,
+                callbackId: callbackId,
+            }),
+        );
+
         const cache = _getCache(adId);
-        const sendMessage = (error = null) => _sendMessage(error, callbackObj, callbackMethod, callbackId);
 
         if (!cache.loaded.length) return sendMessage(`Ad "${adId}" not loaded`);
 
@@ -99,26 +144,11 @@ const FbInstantAdvertisingLibrary = {
         }
         return _ads[adId];
     },
-
-    $_sendMessage: function (error, callbackObj, callbackMethod, callbackId, params = null) {
-        SendMessage(
-            UTF8ToString(callbackObj),
-            UTF8ToString(callbackMethod),
-            JSON.stringify(Object.assign(
-                {
-                    error: error ? JSON.stringify(error) : null,
-                    callbackId: UTF8ToString(callbackId),
-                },
-                params
-            )),
-        );
-    },
 };
 
-autoAddDeps(FbInstantAdvertisingLibrary, "$_isAdReady");
-autoAddDeps(FbInstantAdvertisingLibrary, "$_loadAd");
-autoAddDeps(FbInstantAdvertisingLibrary, "$_showAd");
-autoAddDeps(FbInstantAdvertisingLibrary, "$_ads");
-autoAddDeps(FbInstantAdvertisingLibrary, "$_getCache");
-autoAddDeps(FbInstantAdvertisingLibrary, "$_sendMessage");
-mergeInto(LibraryManager.library, FbInstantAdvertisingLibrary);
+autoAddDeps(FbInstantAdvertisementLibrary, "$_isAdReady");
+autoAddDeps(FbInstantAdvertisementLibrary, "$_loadAd");
+autoAddDeps(FbInstantAdvertisementLibrary, "$_showAd");
+autoAddDeps(FbInstantAdvertisementLibrary, "$_ads");
+autoAddDeps(FbInstantAdvertisementLibrary, "$_getCache");
+mergeInto(LibraryManager.library, FbInstantAdvertisementLibrary);

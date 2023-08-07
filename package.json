@@ -12,7 +12,6 @@
   },
   "dependencies": {},
   "gitDependencies": {
-    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
-    "com.frostbun.unit.extensions": "https://github.com/frostbun/UniT.Extensions.git"
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask"
   }
 }

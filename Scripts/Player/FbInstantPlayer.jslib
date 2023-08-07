@@ -14,13 +14,18 @@ const FbInstantPlayerLibrary = {
 
     _loadPlayerData: function (keys, callbackObj, callbackMethod, callbackId) {
         keys = JSON.parse(UTF8ToString(keys));
+        callbackObj = UTF8ToString(callbackObj);
+        callbackMethod = UTF8ToString(callbackMethod);
+        callbackId = UTF8ToString(callbackId);
 
-        const sendMessage = (data, error = null) => _sendMessage(
-            error,
+        const sendMessage = (data, error = null) => SendMessage(
             callbackObj,
             callbackMethod,
-            callbackId,
-            { data: JSON.stringify(data) }
+            JSON.stringify({
+                data: JSON.stringify(data),
+                error: error ? JSON.stringify(error) : null,
+                callbackId: callbackId,
+            }),
         );
 
         FBInstant.player
@@ -30,18 +35,41 @@ const FbInstantPlayerLibrary = {
     },
 
     _savePlayerData: function (json, callbackObj, callbackMethod, callbackId) {
+        json = JSON.parse(UTF8ToString(json));
+        callbackObj = UTF8ToString(callbackObj);
+        callbackMethod = UTF8ToString(callbackMethod);
+        callbackId = UTF8ToString(callbackId);
 
-        const sendMessage = (error = null) => _sendMessage(error, callbackObj, callbackMethod, callbackId);
+        const sendMessage = (error = null) => SendMessage(
+            callbackObj,
+            callbackMethod,
+            JSON.stringify({
+                data: null,
+                error: error ? JSON.stringify(error) : null,
+                callbackId: callbackId,
+            }),
+        );
 
         FBInstant.player
-            .setDataAsync(JSON.parse(UTF8ToString(json)))
+            .setDataAsync(json)
             .then(sendMessage)
             .catch(sendMessage);
     },
 
     _flushPlayerData: function (callbackObj, callbackMethod, callbackId) {
+        callbackObj = UTF8ToString(callbackObj);
+        callbackMethod = UTF8ToString(callbackMethod);
+        callbackId = UTF8ToString(callbackId);
 
-        const sendMessage = (error = null) => _sendMessage(error, callbackObj, callbackMethod, callbackId);
+        const sendMessage = (error = null) => SendMessage(
+            callbackObj,
+            callbackMethod,
+            JSON.stringify({
+                data: null,
+                error: error ? JSON.stringify(error) : null,
+                callbackId: callbackId,
+            }),
+        );
 
         FBInstant.player
             .flushDataAsync()
@@ -56,22 +84,7 @@ const FbInstantPlayerLibrary = {
         stringToUTF8(str, buffer, size);
         return buffer;
     },
-
-    $_sendMessage: function (error, callbackObj, callbackMethod, callbackId, params = null) {
-        SendMessage(
-            UTF8ToString(callbackObj),
-            UTF8ToString(callbackMethod),
-            JSON.stringify(Object.assign(
-                {
-                    error: error ? JSON.stringify(error) : null,
-                    callbackId: UTF8ToString(callbackId),
-                },
-                params
-            )),
-        );
-    },
 };
 
 autoAddDeps(FbInstantPlayerLibrary, "$_getBuffer");
-autoAddDeps(FbInstantPlayerLibrary, "$_sendMessage");
 mergeInto(LibraryManager.library, FbInstantPlayerLibrary);

@@ -5,7 +5,6 @@ namespace FbInstant.Player
     using System.Runtime.InteropServices;
     using Cysharp.Threading.Tasks;
     using Newtonsoft.Json;
-    using UniT.Extensions;
     using UnityEngine;
 
     public class FbInstantPlayer : MonoBehaviour
@@ -14,20 +13,21 @@ namespace FbInstant.Player
 
         public static FbInstantPlayer Instantiate()
         {
-            return new GameObject(nameof(FbInstantPlayer) + Guid.NewGuid())
-                   .AddComponent<FbInstantPlayer>()
-                   .DontDestroyOnLoad();
+            var instance = new GameObject(nameof(FbInstantPlayer) + Guid.NewGuid())
+                .AddComponent<FbInstantPlayer>();
+            DontDestroyOnLoad(instance);
+            return instance;
         }
 
         public string Id     => _getPlayerId();
         public string Name   => _getPlayerName();
         public string Avatar => _getPlayerAvatar();
 
-        public UniTask<(string[], string)> LoadData(string[] keys) => this.Invoke(JsonConvert.SerializeObject(keys), _loadPlayerData).ContinueWith((data, error) => (JsonConvert.DeserializeObject<string[]>(data), error));
+        public UniTask<(string[], string)> LoadData(string[] keys) => this.Invoke(JsonConvert.SerializeObject(keys), _loadPlayerData).ContinueWith(tuple => (JsonConvert.DeserializeObject<string[]>(tuple.data), tuple.error));
 
-        public UniTask<string> SaveData(string[] keys, string[] rawDatas) => this.Invoke(JsonConvert.SerializeObject(IterTools.Zip(keys, rawDatas).ToDictionary()), _savePlayerData).ContinueWith((_, error) => error);
+        public UniTask<string> SaveData(string[] keys, string[] rawDatas) => this.Invoke(JsonConvert.SerializeObject(ToDictionary(keys, rawDatas)), _savePlayerData).ContinueWith(tuple => tuple.error);
 
-        public UniTask<string> FlushData() => this.Invoke(_flushPlayerData).ContinueWith((_, error) => error);
+        public UniTask<string> FlushData() => this.Invoke(_flushPlayerData).ContinueWith(tuple => tuple.error);
 
         #endregion
 
@@ -35,14 +35,21 @@ namespace FbInstant.Player
 
         private readonly Dictionary<string, UniTaskCompletionSource<(string, string)>> _tcs = new();
 
-        private UniTask<(string, string)> Invoke(string data, Action<string, string, string, string> action) => this.Invoke((callbackObj, callbackMethod, callbackId) => action(data, callbackObj, callbackMethod, callbackId));
+        private UniTask<(string data, string error)> Invoke(string data, Action<string, string, string, string> action) => this.Invoke((callbackObj, callbackMethod, callbackId) => action(data, callbackObj, callbackMethod, callbackId));
 
-        private UniTask<(string, string)> Invoke(Action<string, string, string> action)
+        private async UniTask<(string data, string error)> Invoke(Action<string, string, string> action)
         {
             var callbackId = Guid.NewGuid().ToString();
             this._tcs.Add(callbackId, new());
-            action(this.gameObject.name, nameof(this.Callback), callbackId);
-            return this._tcs[callbackId].Task.Finally(() => this._tcs.Remove(callbackId));
+            try
+            {
+                action(this.gameObject.name, nameof(this.Callback), callbackId);
+                return await this._tcs[callbackId].Task;
+            }
+            finally
+            {
+                this._tcs.Remove(callbackId);
+            }
         }
 
         private void Callback(string message)
@@ -52,6 +59,16 @@ namespace FbInstant.Player
             var error      = @params["error"];
             var callbackId = @params["callbackId"];
             this._tcs[callbackId].TrySetResult((data, error));
+        }
+
+        private static Dictionary<string, string> ToDictionary(string[] keys, string[] values)
+        {
+            var dictionary = new Dictionary<string, string>();
+            for (var i = 0; i < keys.Length; ++i)
+            {
+                dictionary[keys[i]] = values[i];
+            }
+            return dictionary;
         }
 
         #endregion

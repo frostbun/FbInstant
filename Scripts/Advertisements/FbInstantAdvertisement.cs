@@ -5,7 +5,6 @@ namespace FbInstant.Advertisements
     using System.Runtime.InteropServices;
     using Cysharp.Threading.Tasks;
     using Newtonsoft.Json;
-    using UniT.Extensions;
     using UnityEngine;
 
     public class FbInstantAdvertisement : MonoBehaviour
@@ -14,9 +13,10 @@ namespace FbInstant.Advertisements
 
         public static FbInstantAdvertisement Instantiate()
         {
-            return new GameObject(nameof(FbInstantAdvertisement) + Guid.NewGuid())
-                   .AddComponent<FbInstantAdvertisement>()
-                   .DontDestroyOnLoad();
+            var instance = new GameObject(nameof(FbInstantAdvertisement) + Guid.NewGuid())
+                .AddComponent<FbInstantAdvertisement>();
+            DontDestroyOnLoad(instance);
+            return instance;
         }
 
         public UniTask<string> ShowBannerAd(string adId) => this.Invoke(adId, _showBannerAd);
@@ -43,12 +43,19 @@ namespace FbInstant.Advertisements
 
         private UniTask<string> Invoke(string adId, Action<string, string, string, string> action) => this.Invoke((callbackObj, callbackMethod, callbackId) => action(adId, callbackObj, callbackMethod, callbackId));
 
-        private UniTask<string> Invoke(Action<string, string, string> action)
+        private async UniTask<string> Invoke(Action<string, string, string> action)
         {
             var callbackId = Guid.NewGuid().ToString();
             this._tcs.Add(callbackId, new());
-            action(this.gameObject.name, nameof(this.Callback), callbackId);
-            return this._tcs[callbackId].Task.Finally(() => this._tcs.Remove(callbackId));
+            try
+            {
+                action(this.gameObject.name, nameof(this.Callback), callbackId);
+                return await this._tcs[callbackId].Task;
+            }
+            finally
+            {
+                this._tcs.Remove(callbackId);
+            }
         }
 
         private void Callback(string message)
