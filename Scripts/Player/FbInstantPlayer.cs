@@ -2,6 +2,7 @@ namespace FbInstant.Player
 {
     using System;
     using System.Collections.Generic;
+    using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
     using Cysharp.Threading.Tasks;
     using Newtonsoft.Json;
@@ -35,8 +36,10 @@ namespace FbInstant.Player
 
         private readonly Dictionary<string, UniTaskCompletionSource<(string, string)>> _tcs = new();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private UniTask<(string data, string error)> Invoke(string data, Action<string, string, string, string> action) => this.Invoke((callbackObj, callbackMethod, callbackId) => action(data, callbackObj, callbackMethod, callbackId));
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private async UniTask<(string data, string error)> Invoke(Action<string, string, string> action)
         {
             var callbackId = Guid.NewGuid().ToString();
@@ -61,6 +64,7 @@ namespace FbInstant.Player
             this._tcs[callbackId].TrySetResult((data, error));
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static Dictionary<string, string> ToDictionary(string[] keys, string[] values)
         {
             var dictionary = new Dictionary<string, string>();

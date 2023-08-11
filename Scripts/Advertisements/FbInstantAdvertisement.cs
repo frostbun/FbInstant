@@ -2,6 +2,7 @@ namespace FbInstant.Advertisements
 {
     using System;
     using System.Collections.Generic;
+    using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
     using Cysharp.Threading.Tasks;
     using Newtonsoft.Json;
@@ -41,8 +42,10 @@ namespace FbInstant.Advertisements
 
         private readonly Dictionary<string, UniTaskCompletionSource<string>> _tcs = new();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private UniTask<string> Invoke(string adId, Action<string, string, string, string> action) => this.Invoke((callbackObj, callbackMethod, callbackId) => action(adId, callbackObj, callbackMethod, callbackId));
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private async UniTask<string> Invoke(Action<string, string, string> action)
         {
             var callbackId = Guid.NewGuid().ToString();
