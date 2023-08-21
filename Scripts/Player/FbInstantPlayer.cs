@@ -23,7 +23,7 @@ namespace FbInstant.Player
         public string Name   => _getPlayerName();
         public string Avatar => _getPlayerAvatar();
 
-        public UniTask<(string[], string)> LoadData(string[] keys) => this.Invoke(JsonConvert.SerializeObject(keys), _loadPlayerData).ContinueWith(tuple => (JsonConvert.DeserializeObject<string[]>(tuple.data), tuple.error));
+        public UniTask<(string[] rawDatas, string error)> LoadData(string[] keys) => this.Invoke(JsonConvert.SerializeObject(keys), _loadPlayerData).ContinueWith(tuple => (JsonConvert.DeserializeObject<string[]>(tuple.data), tuple.error));
 
         public UniTask<string> SaveData(string[] keys, string[] rawDatas) => this.Invoke(JsonConvert.SerializeObject(ToDictionary(keys, rawDatas)), _savePlayerData).ContinueWith(tuple => tuple.error);
 
@@ -33,7 +33,7 @@ namespace FbInstant.Player
 
         #region Private
 
-        private readonly Dictionary<string, UniTaskCompletionSource<(string, string)>> _tcs = new();
+        private readonly Dictionary<string, UniTaskCompletionSource<(string data, string error)>> _tcs = new();
 
         private UniTask<(string data, string error)> Invoke(string data, Action<string, string, string, string> action) => this.Invoke((callbackObj, callbackMethod, callbackId) => action(data, callbackObj, callbackMethod, callbackId));
 
