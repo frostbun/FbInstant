@@ -66,7 +66,7 @@ const FbInstantAdvertisementLibrary = {
     },
 
     $_isAdReady: function (adId) {
-        return !!(_getCache(UTF8ToString(adId)).loaded.length);
+        return _getCache(UTF8ToString(adId)).loaded.length > 0;
     },
 
     $_loadAd: function (adId, loadInter, callbackObj, callbackMethod, callbackId) {

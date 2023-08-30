@@ -8,12 +8,12 @@ namespace FbInstant.Payments
         public string PaymentId        { get; }
         public string ProductId        { get; }
         public string PurchaseToken    { get; }
-        public bool   IsConsumed       { get; internal set; }
+        public bool?  IsConsumed       { get; internal set; }
         public string DeveloperPayload { get; }
 
         [Preserve]
         [JsonConstructor]
-        internal Purchase(string paymentId, string productId, string purchaseToken, bool isConsumed, string developerPayload)
+        internal Purchase(string paymentId, string productId, string purchaseToken, bool? isConsumed, string developerPayload)
         {
             this.PaymentId        = paymentId;
             this.ProductId        = productId;

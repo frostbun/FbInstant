@@ -21,13 +21,17 @@ namespace FbInstant.Payments
 
         public UniTask<Result> ConsumePurchase(Purchase purchase)
         {
-            if (purchase.IsConsumed) return UniTask.FromResult(new Result("Purchase is already consumed."));
-            return this._fbInstant.Invoke(purchase.PurchaseToken, _consumePurchase)
-                .ContinueWith(result =>
-                {
-                    if (result.IsSuccess) purchase.IsConsumed = true;
-                    return (Result)result;
-                });
+            return purchase.IsConsumed switch
+            {
+                null => UniTask.FromResult(new Result("Purchase is not consumable")),
+                true => UniTask.FromResult(new Result("Purchase is already consumed.")),
+                false => this._fbInstant.Invoke(purchase.PurchaseToken, _consumePurchase)
+                    .ContinueWith(result =>
+                    {
+                        if (result.IsSuccess) purchase.IsConsumed = true;
+                        return (Result)result;
+                    }),
+            };
         }
 
         #endregion
