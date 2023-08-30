@@ -4,10 +4,11 @@ namespace FbInstant.Player
     using System.Runtime.InteropServices;
     using Cysharp.Threading.Tasks;
     using UnityEngine;
+    using UnityEngine.Scripting;
 
     public sealed class FbInstantPlayer
     {
-        private readonly FbInstant _fbInstant = Object.FindObjectOfType<FbInstant>() ?? FbInstant.Instantiate();
+        #region Public
 
         public string Id     => _getPlayerId();
         public string Name   => _getPlayerName();
@@ -28,6 +29,20 @@ namespace FbInstant.Player
             }
             return dictionary;
         }
+
+        #endregion
+
+        #region Constructor
+
+        private readonly FbInstant _fbInstant;
+
+        [Preserve]
+        public FbInstantPlayer()
+        {
+            this._fbInstant = Object.FindObjectOfType<FbInstant>() ?? FbInstant.Instantiate();
+        }
+
+        #endregion
 
         #region DllImport
 

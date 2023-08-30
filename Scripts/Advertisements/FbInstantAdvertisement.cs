@@ -3,10 +3,11 @@ namespace FbInstant.Advertisements
     using System.Runtime.InteropServices;
     using Cysharp.Threading.Tasks;
     using UnityEngine;
+    using UnityEngine.Scripting;
 
     public sealed class FbInstantAdvertisement
     {
-        private readonly FbInstant _fbInstant = Object.FindObjectOfType<FbInstant>() ?? FbInstant.Instantiate();
+        #region Public
 
         public UniTask<Result> ShowBannerAd(string adId) => this._fbInstant.Invoke(adId, _showBannerAd).WithErrorOnly();
 
@@ -23,6 +24,20 @@ namespace FbInstant.Advertisements
         public UniTask<Result> LoadRewardedAd(string adId) => this._fbInstant.Invoke(adId, _loadRewardedAd).WithErrorOnly();
 
         public UniTask<Result> ShowRewardedAd(string adId) => this._fbInstant.Invoke(adId, _showRewardedAd).WithErrorOnly();
+
+        #endregion
+
+        #region Constructor
+
+        private readonly FbInstant _fbInstant;
+
+        [Preserve]
+        public FbInstantAdvertisement()
+        {
+            this._fbInstant = Object.FindObjectOfType<FbInstant>() ?? FbInstant.Instantiate();
+        }
+
+        #endregion
 
         #region DllImport
 
