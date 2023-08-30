@@ -6,16 +6,8 @@ namespace FbInstant.Social
     using Newtonsoft.Json;
     using UnityEngine;
 
-    public class FbInstantSocial : MonoBehaviour
+    public sealed class FbInstantSocial
     {
-        public static FbInstantSocial Instantiate()
-        {
-            var instance = new GameObject(nameof(FbInstantSocial) + Guid.NewGuid())
-                .AddComponent<FbInstantSocial>();
-            DontDestroyOnLoad(instance);
-            return instance;
-        }
-
         public void Invite(string text, Texture2D texture, Dictionary<string, object> @params = null)
         {
             @params          ??= new();
@@ -32,10 +24,14 @@ namespace FbInstant.Social
             _share(JsonConvert.SerializeObject(@params));
         }
 
+        #region DllImport
+
         [DllImport("__Internal")]
         private static extern void _invite(string @params);
 
         [DllImport("__Internal")]
         private static extern void _share(string @params);
+
+        #endregion
     }
 }
