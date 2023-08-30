@@ -1,15 +1,29 @@
 namespace FbInstant.Payments
 {
     using Newtonsoft.Json;
+    using UnityEngine.Scripting;
 
     public sealed class Product
     {
-        [JsonProperty] public string ProductId         { get; }
-        [JsonProperty] public string Title             { get; }
-        [JsonProperty] public string Description       { get; }
-        [JsonProperty] public string ImageUri          { get; }
-        [JsonProperty] public string Price             { get; }
-        [JsonProperty] public float  PriceAmount       { get; }
-        [JsonProperty] public string PriceCurrencyCode { get; }
+        public string ProductId         { get; }
+        public string Title             { get; }
+        public string Description       { get; }
+        public string ImageUri          { get; }
+        public string Price             { get; }
+        public float  PriceAmount       { get; }
+        public string PriceCurrencyCode { get; }
+
+        [Preserve]
+        [JsonConstructor]
+        internal Product(string productId, string title, string description, string imageUri, string price, float priceAmount, string priceCurrencyCode)
+        {
+            this.ProductId         = productId;
+            this.Title             = title;
+            this.Description       = description;
+            this.ImageUri          = imageUri;
+            this.Price             = price;
+            this.PriceAmount       = priceAmount;
+            this.PriceCurrencyCode = priceCurrencyCode;
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace FbInstant
     using Cysharp.Threading.Tasks;
     using Newtonsoft.Json;
     using UnityEngine;
+    using UnityEngine.Scripting;
 
     internal sealed class FbInstant : MonoBehaviour
     {
@@ -46,6 +47,8 @@ namespace FbInstant
         {
             public string CallbackId { get; }
 
+            [Preserve]
+            [JsonConstructor]
             public Message(string data, string error, string callbackId) : base(data, error)
             {
                 this.CallbackId = callbackId;
