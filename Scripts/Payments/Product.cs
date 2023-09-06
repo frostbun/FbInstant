@@ -1,4 +1,4 @@
-namespace FbInstant.Payments
+namespace FbInstant
 {
     using Newtonsoft.Json;
     using UnityEngine.Scripting;

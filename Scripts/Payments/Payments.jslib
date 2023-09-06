@@ -1,4 +1,4 @@
-const FbInstantPaymentLibrary = {
+const Payments = {
 
     _getCatalog: function (callbackObj, callbackMethod, callbackId) {
         callbackObj = UTF8ToString(callbackObj);
@@ -42,9 +42,9 @@ const FbInstantPaymentLibrary = {
             .catch(error => sendMessage([], error));
     },
 
-    _purchase: function (productId, payload, callbackObj, callbackMethod, callbackId) {
+    _purchase: function (productId, developerPayload, callbackObj, callbackMethod, callbackId) {
         productId = UTF8ToString(productId);
-        payload = UTF8ToString(payload);
+        developerPayload = UTF8ToString(developerPayload);
         callbackObj = UTF8ToString(callbackObj);
         callbackMethod = UTF8ToString(callbackMethod);
         callbackId = UTF8ToString(callbackId);
@@ -62,7 +62,7 @@ const FbInstantPaymentLibrary = {
         FBInstant.payments
             .purchaseAsync({
                 productID: productId,
-                developerPayload: payload,
+                developerPayload: developerPayload,
             })
             .then(purchase => sendMessage(purchase, null))
             .catch(error => sendMessage(null, error));
@@ -90,4 +90,4 @@ const FbInstantPaymentLibrary = {
     },
 };
 
-mergeInto(LibraryManager.library, FbInstantPaymentLibrary);
+mergeInto(LibraryManager.library, Payments);

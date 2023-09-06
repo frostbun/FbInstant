@@ -1,4 +1,4 @@
-const FbInstantAdvertisementLibrary = {
+const Advertisements = {
 
     _showBannerAd: function (adId, callbackObj, callbackMethod, callbackId) {
         adId = UTF8ToString(adId);
@@ -146,9 +146,9 @@ const FbInstantAdvertisementLibrary = {
     },
 };
 
-autoAddDeps(FbInstantAdvertisementLibrary, "$_isAdReady");
-autoAddDeps(FbInstantAdvertisementLibrary, "$_loadAd");
-autoAddDeps(FbInstantAdvertisementLibrary, "$_showAd");
-autoAddDeps(FbInstantAdvertisementLibrary, "$_ads");
-autoAddDeps(FbInstantAdvertisementLibrary, "$_getCache");
-mergeInto(LibraryManager.library, FbInstantAdvertisementLibrary);
+autoAddDeps(Advertisements, "$_isAdReady");
+autoAddDeps(Advertisements, "$_loadAd");
+autoAddDeps(Advertisements, "$_showAd");
+autoAddDeps(Advertisements, "$_ads");
+autoAddDeps(Advertisements, "$_getCache");
+mergeInto(LibraryManager.library, Advertisements);

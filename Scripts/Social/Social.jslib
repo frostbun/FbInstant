@@ -1,4 +1,4 @@
-const FbInstantSocialLibrary = {
+const Social = {
 
     _invite: function (params) {
         FBInstant
@@ -13,4 +13,4 @@ const FbInstantSocialLibrary = {
     },
 };
 
-mergeInto(LibraryManager.library, FbInstantSocialLibrary);
+mergeInto(LibraryManager.library, Social);

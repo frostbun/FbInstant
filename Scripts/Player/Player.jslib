@@ -1,4 +1,4 @@
-const FbInstantPlayerLibrary = {
+const Player = {
 
     _getPlayerId: function () {
         return _getBuffer(FBInstant.player.getID());
@@ -86,5 +86,5 @@ const FbInstantPlayerLibrary = {
     },
 };
 
-autoAddDeps(FbInstantPlayerLibrary, "$_getBuffer");
-mergeInto(LibraryManager.library, FbInstantPlayerLibrary);
+autoAddDeps(Player, "$_getBuffer");
+mergeInto(LibraryManager.library, Player);
