@@ -15,10 +15,7 @@ const Advertisements = {
             }),
         );
 
-        FBInstant
-            .loadBannerAdAsync(adId)
-            .then(sendMessage)
-            .catch(sendMessage);
+        FBInstant.loadBannerAdAsync(adId).then(sendMessage).catch(sendMessage);
     },
 
     _hideBannerAd: function (callbackObj, callbackMethod, callbackId) {
@@ -35,10 +32,7 @@ const Advertisements = {
             }),
         );
 
-        FBInstant
-            .hideBannerAdAsync()
-            .then(sendMessage)
-            .catch(sendMessage);
+        FBInstant.hideBannerAdAsync().then(sendMessage).catch(sendMessage);
     },
 
     _isInterstitialAdReady: function (adId) {
@@ -124,12 +118,7 @@ const Advertisements = {
 
         const ad = cache.loaded.shift();
 
-        ad.showAsync()
-            .then(sendMessage)
-            .catch(error => {
-                cache.loaded.push(ad);
-                sendMessage(error);
-            });
+        ad.showAsync().then(sendMessage).catch(sendMessage);
     },
 
     $_ads: {},
