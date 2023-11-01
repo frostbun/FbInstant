@@ -1,4 +1,4 @@
-namespace FbInstant
+namespace UniT.FbInstant
 {
     using System.Runtime.InteropServices;
     using Cysharp.Threading.Tasks;

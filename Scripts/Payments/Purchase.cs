@@ -1,4 +1,4 @@
-namespace FbInstant
+namespace UniT.FbInstant
 {
     using Newtonsoft.Json;
     using UnityEngine.Scripting;

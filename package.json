@@ -1,16 +1,15 @@
 {
-  "name": "com.frostbun.fbinstant",
-  "displayName": "Facebook Instant",
+  "name": "com.frostbun.unit.fbinstant",
+  "displayName": "UniT Facebook Instant",
   "version": "1.0.0",
-  "description": "Facebook Instant Games SDK for Unity",
+  "description": "Facebook Instant Game SDK for Unity",
   "license": "MIT",
-  "unity": "2023.5",
+  "unity": "2022.3",
   "author": {
     "name": "frostbun",
     "email": "manhnb1911@gmail.com",
     "url": "https://github.com/frostbun"
   },
-  "dependencies": {},
   "gitDependencies": {
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask"
   }

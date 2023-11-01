@@ -1,7 +1,0 @@
-{
-  "name": "FbInstant",
-  "rootNamespace": "FbInstant",
-  "references": [
-    "UniTask"
-  ]
-}

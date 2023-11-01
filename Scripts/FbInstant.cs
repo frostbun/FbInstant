@@ -1,4 +1,4 @@
-namespace FbInstant
+namespace UniT.FbInstant
 {
     using System;
     using System.Collections.Generic;

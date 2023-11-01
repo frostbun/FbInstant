@@ -1,4 +1,4 @@
-namespace FbInstant
+namespace UniT.FbInstant
 {
     public class Result
     {

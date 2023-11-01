@@ -1,0 +1,7 @@
+{
+  "name": "UniT.FbInstant",
+  "rootNamespace": "UniT.FbInstant",
+  "references": [
+    "UniTask"
+  ]
+}
