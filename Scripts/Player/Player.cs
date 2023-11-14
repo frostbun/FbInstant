@@ -1,6 +1,7 @@
 namespace UniT.FbInstant
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Runtime.InteropServices;
     using Cysharp.Threading.Tasks;
 
@@ -16,15 +17,7 @@ namespace UniT.FbInstant
 
             public static UniTask<Result<string[]>> LoadData(string[] keys) => This.Invoke(keys, _loadPlayerData).Convert<string[]>();
 
-            public static UniTask<Result> SaveData(string[] keys, string[] rawDatas)
-            {
-                var dictionary = new Dictionary<string, string>();
-                for (var i = 0; i < keys.Length; ++i)
-                {
-                    dictionary[keys[i]] = rawDatas[i];
-                }
-                return This.Invoke(dictionary, _savePlayerData).WithErrorOnly();
-            }
+            public static UniTask<Result> SaveData(string[] keys, string[] rawDatas) => This.Invoke(new Dictionary<string, string>(Enumerable.Zip(keys, rawDatas, (key, rawData) => new KeyValuePair<string, string>(key, rawData))), _savePlayerData).WithErrorOnly();
 
             public static UniTask<Result> FlushData() => This.Invoke(_flushPlayerData).WithErrorOnly();
 
