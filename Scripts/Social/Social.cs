@@ -13,7 +13,7 @@ namespace UniT.FbInstant
 
             public static void Invite(string text, Texture2D texture, Dictionary<string, object> @params = null)
             {
-                @params          ??= new();
+                @params          ??= new Dictionary<string, object>();
                 @params["text"]  =   text;
                 @params["image"] =   "data:image/png;base64," + System.Convert.ToBase64String(texture.EncodeToPNG());
                 _invite(JsonConvert.SerializeObject(@params));
@@ -21,7 +21,7 @@ namespace UniT.FbInstant
 
             public static void Share(string text, Texture2D texture, Dictionary<string, object> @params = null)
             {
-                @params          ??= new();
+                @params          ??= new Dictionary<string, object>();
                 @params["text"]  =   text;
                 @params["image"] =   "data:image/png;base64," + System.Convert.ToBase64String(texture.EncodeToPNG());
                 _share(JsonConvert.SerializeObject(@params));

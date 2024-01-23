@@ -5,7 +5,7 @@ namespace UniT.FbInstant
         public string Error { get; }
 
         public bool IsSuccess => this.Error is null;
-        public bool IsError   => this.Error is not null;
+        public bool IsError   => this.Error is { };
 
         internal Result(string error)
         {

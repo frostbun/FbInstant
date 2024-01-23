@@ -16,7 +16,7 @@ namespace UniT.FbInstant
 
             static This() => DontDestroyOnLoad(new GameObject(CALLBACK_OBJ).AddComponent<This>());
 
-            private static readonly Dictionary<string, UniTaskCompletionSource<Result<string>>> Tcs = new();
+            private static readonly Dictionary<string, UniTaskCompletionSource<Result<string>>> Tcs = new Dictionary<string, UniTaskCompletionSource<Result<string>>>();
 
             public static UniTask<Result<string>> Invoke(object data, Action<string> action) => Invoke(JsonConvert.SerializeObject(data), action);
 
@@ -25,7 +25,7 @@ namespace UniT.FbInstant
             public static async UniTask<Result<string>> Invoke(Action action)
             {
                 var callbackId = Guid.NewGuid().ToString();
-                Tcs.Add(callbackId, new());
+                Tcs.Add(callbackId, new UniTaskCompletionSource<Result<string>>());
                 try
                 {
                     action(CALLBACK_OBJ, CALLBACK_METHOD, callbackId);
