@@ -124,7 +124,6 @@ const Advertisements = {
     $_ads: {},
 
     $_getCache: function (adId) {
-        adId = UTF8ToString(adId);
         if (!(adId in _ads)) {
             _ads[adId] = {
                 loading: [],

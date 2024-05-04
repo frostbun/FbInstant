@@ -24,11 +24,11 @@ namespace UniT.FbInstant
                     null => UniTask.FromResult(new Result("Purchase is not consumable")),
                     true => UniTask.FromResult(new Result("Purchase is already consumed.")),
                     false => This.Invoke(purchase.PurchaseToken, _consumePurchase)
-                                 .ContinueWith(result =>
-                                 {
-                                     if (result.IsSuccess) purchase.IsConsumed = true;
-                                     return (Result)result;
-                                 }),
+                        .ContinueWith(result =>
+                        {
+                            if (result.IsSuccess) purchase.IsConsumed = true;
+                            return (Result)result;
+                        }),
                 };
             }
 
