@@ -1,1 +1,1 @@
-# Facebook Instant Games SDK for Unity
+# Facebook Instant Game SDK for Unity
