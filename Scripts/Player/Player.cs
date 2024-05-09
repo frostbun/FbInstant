@@ -3,7 +3,7 @@ namespace UniT.FbInstant
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.InteropServices;
-    using Cysharp.Threading.Tasks;
+    using System.Threading.Tasks;
 
     public static partial class FbInstant
     {
@@ -15,11 +15,11 @@ namespace UniT.FbInstant
             public static string Name   => _getPlayerName();
             public static string Avatar => _getPlayerAvatar();
 
-            public static UniTask<Result<string[]>> LoadData(string[] keys) => This.Invoke(keys, _loadPlayerData).Convert<string[]>();
+            public static Task<Result<string[]>> LoadDataAsync(string[] keys) => This.InvokeAsync(keys, _loadPlayerData).Convert<string[]>();
 
-            public static UniTask<Result> SaveData(string[] keys, string[] rawDatas) => This.Invoke(new Dictionary<string, string>(Enumerable.Zip(keys, rawDatas, (key, rawData) => new KeyValuePair<string, string>(key, rawData))), _savePlayerData).WithErrorOnly();
+            public static Task<Result> SaveDataAsync(string[] keys, string[] rawDatas) => This.InvokeAsync(new Dictionary<string, string>(Enumerable.Zip(keys, rawDatas, (key, rawData) => new KeyValuePair<string, string>(key, rawData))), _savePlayerData).WithErrorOnly();
 
-            public static UniTask<Result> FlushData() => This.Invoke(_flushPlayerData).WithErrorOnly();
+            public static Task<Result> FlushDataAsync() => This.InvokeAsync(_flushPlayerData).WithErrorOnly();
 
             #endregion
 

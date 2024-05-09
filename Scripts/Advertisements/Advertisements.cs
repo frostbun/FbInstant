@@ -1,7 +1,7 @@
 namespace UniT.FbInstant
 {
     using System.Runtime.InteropServices;
-    using Cysharp.Threading.Tasks;
+    using System.Threading.Tasks;
 
     public static partial class FbInstant
     {
@@ -9,21 +9,21 @@ namespace UniT.FbInstant
         {
             #region Public
 
-            public static UniTask<Result> ShowBannerAd(string adId) => This.Invoke(adId, _showBannerAd).WithErrorOnly();
+            public static Task<Result> ShowBannerAdAsync(string adId) => This.InvokeAsync(adId, _showBannerAd).WithErrorOnly();
 
-            public static UniTask<Result> HideBannerAd() => This.Invoke(_hideBannerAd).WithErrorOnly();
+            public static Task<Result> HideBannerAdAsync() => This.InvokeAsync(_hideBannerAd).WithErrorOnly();
 
             public static bool IsInterstitialAdReady(string adId) => _isInterstitialAdReady(adId);
 
-            public static UniTask<Result> LoadInterstitialAd(string adId) => This.Invoke(adId, _loadInterstitialAd).WithErrorOnly();
+            public static Task<Result> LoadInterstitialAdAsync(string adId) => This.InvokeAsync(adId, _loadInterstitialAd).WithErrorOnly();
 
-            public static UniTask<Result> ShowInterstitialAd(string adId) => This.Invoke(adId, _showInterstitialAd).WithErrorOnly();
+            public static Task<Result> ShowInterstitialAdAsync(string adId) => This.InvokeAsync(adId, _showInterstitialAd).WithErrorOnly();
 
             public static bool IsRewardedAdReady(string adId) => _isRewardedAdReady(adId);
 
-            public static UniTask<Result> LoadRewardedAd(string adId) => This.Invoke(adId, _loadRewardedAd).WithErrorOnly();
+            public static Task<Result> LoadRewardedAdAsync(string adId) => This.InvokeAsync(adId, _loadRewardedAd).WithErrorOnly();
 
-            public static UniTask<Result> ShowRewardedAd(string adId) => This.Invoke(adId, _showRewardedAd).WithErrorOnly();
+            public static Task<Result> ShowRewardedAdAsync(string adId) => This.InvokeAsync(adId, _showRewardedAd).WithErrorOnly();
 
             #endregion
 

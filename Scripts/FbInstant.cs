@@ -2,7 +2,7 @@ namespace UniT.FbInstant
 {
     using System;
     using System.Collections.Generic;
-    using Cysharp.Threading.Tasks;
+    using System.Threading.Tasks;
     using Newtonsoft.Json;
     using UnityEngine;
     using UnityEngine.Scripting;
@@ -16,16 +16,16 @@ namespace UniT.FbInstant
 
             static This() => DontDestroyOnLoad(new GameObject(CALLBACK_OBJ).AddComponent<This>());
 
-            private static readonly Dictionary<string, UniTaskCompletionSource<Result<string>>> Tcs = new Dictionary<string, UniTaskCompletionSource<Result<string>>>();
+            private static readonly Dictionary<string, TaskCompletionSource<Result<string>>> Tcs = new Dictionary<string, TaskCompletionSource<Result<string>>>();
 
-            public static UniTask<Result<string>> Invoke(object data, Action<string> action) => Invoke(JsonConvert.SerializeObject(data), action);
+            public static Task<Result<string>> InvokeAsync(object data, Action<string> action) => InvokeAsync(JsonConvert.SerializeObject(data), action);
 
-            public static UniTask<Result<string>> Invoke(string data, Action<string> action) => Invoke((callbackObj, callbackMethod, callbackId) => action(data, callbackObj, callbackMethod, callbackId));
+            public static Task<Result<string>> InvokeAsync(string data, Action<string> action) => InvokeAsync((callbackObj, callbackMethod, callbackId) => action(data, callbackObj, callbackMethod, callbackId));
 
-            public static async UniTask<Result<string>> Invoke(Action action)
+            public static async Task<Result<string>> InvokeAsync(Action action)
             {
                 var callbackId = Guid.NewGuid().ToString();
-                Tcs.Add(callbackId, new UniTaskCompletionSource<Result<string>>());
+                Tcs.Add(callbackId, new TaskCompletionSource<Result<string>>());
                 try
                 {
                     action(CALLBACK_OBJ, CALLBACK_METHOD, callbackId);
@@ -79,14 +79,15 @@ namespace UniT.FbInstant
             }
         }
 
-        private static UniTask<Result<T>> Convert<T>(this UniTask<Result<string>> task)
+        private static async Task<Result<T>> Convert<T>(this Task<Result<string>> task)
         {
-            return task.ContinueWith(result => new Result<T>(JsonConvert.DeserializeObject<T>(result.Data), result.Error));
+            var result = await task;
+            return new Result<T>(JsonConvert.DeserializeObject<T>(result.Data), result.Error);
         }
 
-        private static UniTask<Result> WithErrorOnly(this UniTask<Result<string>> task)
+        private static async Task<Result> WithErrorOnly(this Task<Result<string>> task)
         {
-            return task.ContinueWith(result => (Result)result);
+            return await task;
         }
 
         private delegate void Action(string callbackObj, string callbackMethod, string callbackId);
