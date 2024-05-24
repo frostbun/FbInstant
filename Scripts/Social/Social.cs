@@ -1,3 +1,4 @@
+#nullable enable
 namespace UniT.FbInstant
 {
     using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace UniT.FbInstant
         {
             #region Public
 
-            public static void Invite(string text, Texture2D texture, Dictionary<string, object> @params = null)
+            public static void Invite(string text, Texture2D texture, Dictionary<string, object>? @params = null)
             {
                 @params          ??= new Dictionary<string, object>();
                 @params["text"]  =   text;
@@ -19,7 +20,7 @@ namespace UniT.FbInstant
                 _invite(JsonConvert.SerializeObject(@params));
             }
 
-            public static void Share(string text, Texture2D texture, Dictionary<string, object> @params = null)
+            public static void Share(string text, Texture2D texture, Dictionary<string, object>? @params = null)
             {
                 @params          ??= new Dictionary<string, object>();
                 @params["text"]  =   text;

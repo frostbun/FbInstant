@@ -1,3 +1,4 @@
+#nullable enable
 namespace UniT.FbInstant
 {
     using System.Runtime.InteropServices;
