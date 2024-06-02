@@ -17,16 +17,16 @@ namespace UniT.FbInstant
 
             static This() => DontDestroyOnLoad(new GameObject(CALLBACK_OBJ).AddComponent<This>());
 
-            private static readonly Dictionary<string, TaskCompletionSource<Result<string>>> Tcs = new Dictionary<string, TaskCompletionSource<Result<string>>>();
+            private static readonly Dictionary<string, TaskCompletionSource<string?>> Tcs = new Dictionary<string, TaskCompletionSource<string?>>();
 
-            public static Task<Result<string>> InvokeAsync(object data, Action<string> action) => InvokeAsync(JsonConvert.SerializeObject(data), action);
+            public static Task<string?> InvokeAsync(object data, Action<string> action) => InvokeAsync(JsonConvert.SerializeObject(data), action);
 
-            public static Task<Result<string>> InvokeAsync(string data, Action<string> action) => InvokeAsync((callbackObj, callbackMethod, callbackId) => action(data, callbackObj, callbackMethod, callbackId));
+            public static Task<string?> InvokeAsync(string data, Action<string> action) => InvokeAsync((callbackObj, callbackMethod, callbackId) => action(data, callbackObj, callbackMethod, callbackId));
 
-            public static async Task<Result<string>> InvokeAsync(Action action)
+            public static async Task<string?> InvokeAsync(Action action)
             {
                 var callbackId = Guid.NewGuid().ToString();
-                Tcs.Add(callbackId, new TaskCompletionSource<Result<string>>());
+                Tcs.Add(callbackId, new TaskCompletionSource<string?>());
                 try
                 {
                     action(CALLBACK_OBJ, CALLBACK_METHOD, callbackId);
@@ -40,55 +40,44 @@ namespace UniT.FbInstant
 
             private void Callback(string json)
             {
-                var message = JsonConvert.DeserializeObject<Message>(json)!;
-                Tcs[message.CallbackId].TrySetResult(message);
+                var result = JsonConvert.DeserializeObject<Result>(json)!;
+                if (result.Error is null)
+                {
+                    Tcs[result.CallbackId].TrySetResult(result.Data);
+                }
+                else
+                {
+                    Tcs[result.CallbackId].TrySetException(new Exception(result.Error));
+                }
             }
 
-            private sealed class Message : Result<string>
+            private sealed class Result
             {
-                public string CallbackId { get; }
+                public string? Data       { get; }
+                public string? Error      { get; }
+                public string  CallbackId { get; }
 
                 [Preserve]
-                [JsonConstructor]
-                public Message(string data, string error, string callbackId) : base(data, error)
+                public Result(string? data, string? error, string callbackId)
                 {
+                    this.Data       = data;
+                    this.Error      = error;
                     this.CallbackId = callbackId;
                 }
             }
         }
 
-        public class Result
+        public class Exception : System.Exception
         {
-            public string? Error { get; }
-
-            public bool IsSuccess => this.Error is null;
-            public bool IsError   => this.Error is { };
-
-            internal Result(string? error)
+            public Exception(string message) : base(message)
             {
-                this.Error = error;
             }
         }
 
-        public class Result<T> : Result
+        private static async Task<T> Convert<T>(this Task<string?> task)
         {
-            public T Data { get; }
-
-            internal Result(T data, string? error) : base(error)
-            {
-                this.Data = data;
-            }
-        }
-
-        private static async Task<Result<T>> Convert<T>(this Task<Result<string>> task)
-        {
-            var result = await task;
-            return new Result<T>(JsonConvert.DeserializeObject<T>(result.Data)!, result.Error);
-        }
-
-        private static async Task<Result> WithErrorOnly(this Task<Result<string>> task)
-        {
-            return await task;
+            var json = await task;
+            return JsonConvert.DeserializeObject<T>(json!)!;
         }
 
         private delegate void Action(string callbackObj, string callbackMethod, string callbackId);

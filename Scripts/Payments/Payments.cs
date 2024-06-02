@@ -10,28 +10,27 @@ namespace UniT.FbInstant
         {
             #region Public
 
-            public static Task<Result<Product[]>> GetCatalogAsync() => This.InvokeAsync(_getCatalog).Convert<Product[]>();
+            public static Task<Product[]> GetCatalogAsync() => This.InvokeAsync(_getCatalog).Convert<Product[]>();
 
-            public static Task<Result<Purchase[]>> GetPurchasesAsync() => This.InvokeAsync(_getPurchases).Convert<Purchase[]>();
+            public static Task<Purchase[]> GetPurchasesAsync() => This.InvokeAsync(_getPurchases).Convert<Purchase[]>();
 
-            public static Task<Result<Purchase>> PurchaseAsync(Product product, string? developerPayload = null) => PurchaseAsync(product.ProductId, developerPayload);
+            public static Task<Purchase> PurchaseAsync(Product product, string? developerPayload = null) => PurchaseAsync(product.ProductId, developerPayload);
 
-            public static Task<Result<Purchase>> PurchaseAsync(string productId, string? developerPayload = null) => This.InvokeAsync((callbackObj, callbackMethod, callbackId) => _purchase(productId, developerPayload, callbackObj, callbackMethod, callbackId)).Convert<Purchase>();
+            public static Task<Purchase> PurchaseAsync(string productId, string? developerPayload = null) => This.InvokeAsync((callbackObj, callbackMethod, callbackId) => _purchase(productId, developerPayload, callbackObj, callbackMethod, callbackId)).Convert<Purchase>();
 
-            public static Task<Result> ConsumePurchaseAsync(Purchase purchase)
+            public static Task ConsumePurchaseAsync(Purchase purchase)
             {
                 return purchase.IsConsumed switch
                 {
-                    null  => Task.FromResult(new Result("Purchase is not consumable")),
-                    true  => Task.FromResult(new Result("Purchase is already consumed.")),
+                    null  => Task.FromException(new Exception("Purchase is not consumable")),
+                    true  => Task.FromException(new Exception("Purchase is already consumed.")),
                     false => ConsumePurchaseAsync(),
                 };
 
-                async Task<Result> ConsumePurchaseAsync()
+                async Task ConsumePurchaseAsync()
                 {
-                    var result                                = await This.InvokeAsync(purchase.PurchaseToken, _consumePurchase);
-                    if (result.IsSuccess) purchase.IsConsumed = true;
-                    return result;
+                    await This.InvokeAsync(purchase.PurchaseToken, _consumePurchase);
+                    purchase.IsConsumed = true;
                 }
             }
 

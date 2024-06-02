@@ -16,11 +16,11 @@ namespace UniT.FbInstant
             public static string Name   => _getPlayerName();
             public static string Avatar => _getPlayerAvatar();
 
-            public static Task<Result<string[]>> LoadDataAsync(string[] keys) => This.InvokeAsync(keys, _loadPlayerData).Convert<string[]>();
+            public static Task<string[]> LoadDataAsync(string[] keys) => This.InvokeAsync(keys, _loadPlayerData).Convert<string[]>();
 
-            public static Task<Result> SaveDataAsync(string[] keys, string[] rawDatas) => This.InvokeAsync(new Dictionary<string, string>(Enumerable.Zip(keys, rawDatas, (key, rawData) => new KeyValuePair<string, string>(key, rawData))), _savePlayerData).WithErrorOnly();
+            public static Task SaveDataAsync(string[] keys, string[] rawDatas) => This.InvokeAsync(new Dictionary<string, string>(Enumerable.Zip(keys, rawDatas, (key, rawData) => new KeyValuePair<string, string>(key, rawData))), _savePlayerData);
 
-            public static Task<Result> FlushDataAsync() => This.InvokeAsync(_flushPlayerData).WithErrorOnly();
+            public static Task FlushDataAsync() => This.InvokeAsync(_flushPlayerData);
 
             #endregion
 

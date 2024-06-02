@@ -10,21 +10,21 @@ namespace UniT.FbInstant
         {
             #region Public
 
-            public static Task<Result> ShowBannerAdAsync(string adId) => This.InvokeAsync(adId, _showBannerAd).WithErrorOnly();
+            public static Task ShowBannerAdAsync(string adId) => This.InvokeAsync(adId, _showBannerAd);
 
-            public static Task<Result> HideBannerAdAsync() => This.InvokeAsync(_hideBannerAd).WithErrorOnly();
+            public static Task HideBannerAdAsync() => This.InvokeAsync(_hideBannerAd);
 
             public static bool IsInterstitialAdReady(string adId) => _isInterstitialAdReady(adId);
 
-            public static Task<Result> LoadInterstitialAdAsync(string adId) => This.InvokeAsync(adId, _loadInterstitialAd).WithErrorOnly();
+            public static Task LoadInterstitialAdAsync(string adId) => This.InvokeAsync(adId, _loadInterstitialAd);
 
-            public static Task<Result> ShowInterstitialAdAsync(string adId) => This.InvokeAsync(adId, _showInterstitialAd).WithErrorOnly();
+            public static Task ShowInterstitialAdAsync(string adId) => This.InvokeAsync(adId, _showInterstitialAd);
 
             public static bool IsRewardedAdReady(string adId) => _isRewardedAdReady(adId);
 
-            public static Task<Result> LoadRewardedAdAsync(string adId) => This.InvokeAsync(adId, _loadRewardedAd).WithErrorOnly();
+            public static Task LoadRewardedAdAsync(string adId) => This.InvokeAsync(adId, _loadRewardedAd);
 
-            public static Task<Result> ShowRewardedAdAsync(string adId) => This.InvokeAsync(adId, _showRewardedAd).WithErrorOnly();
+            public static Task ShowRewardedAdAsync(string adId) => This.InvokeAsync(adId, _showRewardedAd);
 
             #endregion
 
