@@ -67,7 +67,7 @@ namespace UniT.FbInstant
             }
         }
 
-        public class Exception : System.Exception
+        public sealed class Exception : System.Exception
         {
             public Exception(string message) : base(message)
             {
